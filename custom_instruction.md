@@ -10,7 +10,7 @@ This guide provides **MANDATORY** instructions for explicitly notifying users wh
 
 1. **MUST** Run the 'start-timer' tool of the 'notify-completion' MCP.
 
-**IMPORTANT**: When executing a task and reaching the stage where ask_followup_question or attempt_completion is executed,, you MUST:
+**IMPORTANT**: When executing a task and reaching the stage where ask_followup_question or attempt_completion is executed, you MUST:
 
 1. **MUST** Run the 'check-overdue' tool in 'notify-completion' MCP.
 2. **MUST** If the 'check-overdue' tool reports 'overdue': true, execute the contents of 'command' using execute_command.
