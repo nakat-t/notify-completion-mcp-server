@@ -11,7 +11,8 @@
     "inspector": "npx @modelcontextprotocol/inspector node build/index.js"
   },
   "files": [
-    "build"
+    "build",
+    "custom_instruction.md"
   ],
   "publishConfig": {
     "access": "public"
@@ -21,7 +22,7 @@
     "url": "git+https://github.com/nakat-t/notify-completion-mcp-server.git"
   },
   "keywords": ["mcp", "cline", "notify"],
-  "author": "",
+  "author": "nakat-t <armaiti.wizard@gmail.com>",
   "license": "MIT",
   "type": "module",
   "bugs": {
