@@ -1,8 +1,8 @@
 {
-  "name": "notify-completion-mcp-server",
+  "name": "@nakat-t/notify-completion-mcp-server",
   "version": "1.0.0",
   "description": "The MCP server that provides notifications when AI agents complete long-running tasks. This allows you to leave your desktop without forgetting about tasks.",
-  "main": "index.js",
+  "main": "./build/index.js",
   "bin": {
     "notify-completion-mcp-server": "./build/index.js"
   },
@@ -13,11 +13,14 @@
   "files": [
     "build"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nakat-t/notify-completion-mcp-server.git"
   },
-  "keywords": [],
+  "keywords": ["mcp", "cline", "notify"],
   "author": "",
   "license": "MIT",
   "type": "module",
