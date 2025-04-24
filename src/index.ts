@@ -51,7 +51,7 @@ server.tool(
   },
 );
 
-const defaultThreshold = 30; // Default threshold in seconds
+const defaultThreshold = 0; // Default threshold in seconds
 const defaultOverdueCommand = 'echo -e "\\a"'; // Default command to execute when overdue
 
 server.tool(
