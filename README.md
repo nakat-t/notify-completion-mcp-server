@@ -11,7 +11,7 @@ The MCP server that provides notifications when AI agents complete long-running 
   "mcpServers": {
     "notify-completion": {
       "command": "npx",
-      "args": ["-y", "@nakat-t/notify-completion-mcp-server"],
+      "args": ["-y", "@nakat-t/notify-completion-mcp-server@latest"],
       "env": {
         "THRESHOLD": "<Threshold seconds>",
         "OVERDUE_COMMAND": "<Command to execute very flashy effects>",
