@@ -4,9 +4,10 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 import { appendFile } from "fs";
+import { execSync } from "child_process";
 
 const mcpName = "notify-completion";
-const mcpVersion = "1.0.0";
+const mcpVersion = "1.0.2";
 
 function debugLog(message?: any, ...optionalParams: any[]) {
   const timestamp = new Date().toISOString();
@@ -55,6 +56,7 @@ server.tool(
 
 const defaultThreshold = 0; // Default threshold in seconds
 const defaultOverdueCommand = 'echo -e "\\a"'; // Default command to execute when overdue
+const execInServerReturnCommand = 'echo "Task completed! Overdue command was executed by the MCP server."'; //
 
 server.tool(
   "check-overdue",
@@ -63,7 +65,7 @@ server.tool(
     startTime: z.string().datetime({ offset: true }).describe("Start time returned by start-timer")
   },
   async ({ startTime }) => {
-    const toolName = "start-timer";
+    const toolName = "check-overdue";
     debugLog(`${toolName}: tool called: startTime=${startTime}`);
 
     const startDate = new Date(startTime);
@@ -78,8 +80,19 @@ server.tool(
     var response = `{"elapsed": "${elapsedSeconds}", "units": "seconds"`;
     if (isOverdue) {
       debugLog(`${toolName}: task is overdue`);
-      const overdueCommand = JSON.stringify(process.env.OVERDUE_COMMAND || defaultOverdueCommand);
-      response += `, "overdue": true, "command": ${overdueCommand}`;
+      const overdueCommand = process.env.OVERDUE_COMMAND || defaultOverdueCommand;
+      const executeInServer = !!process.env.EXECUTE_IN_SERVER;
+      if (executeInServer) {
+        try {
+          execSync(overdueCommand, { stdio: "ignore" });
+          debugLog(`${toolName}: executed overdueCommand in server: ${overdueCommand}`);
+        } catch (err) {
+          debugLog(`${toolName}: failed to execute overdueCommand:`, err);
+        }
+        response += `, "overdue": true, "command": ${JSON.stringify(execInServerReturnCommand)}`;
+      } else {
+        response += `, "overdue": true, "command": ${JSON.stringify(overdueCommand)}`;
+      }
     }
     else {
       debugLog(`${toolName}: task is not overdue`);
