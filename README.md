@@ -2,9 +2,42 @@
 
 The MCP server that provides notifications when AI agents complete long-running tasks. This allows you to leave your desktop without forgetting about tasks.
 
+## How It Works
+
+```mermaid
+sequenceDiagram
+    actor You
+    participant AI Agent
+    participant MCP
+    You ->> AI Agent: Please do this task!
+    activate You
+    activate AI Agent
+    AI Agent ->> MCP: start-timer
+    activate MCP
+    MCP -->> AI Agent: {"startTime":"..."}
+    deactivate MCP
+    You ->> You: Go for coffee
+    deactivate You
+    AI Agent ->> AI Agent: Long task...
+    AI Agent ->> AI Agent: Do my best...
+    AI Agent ->> AI Agent: I did it!
+    AI Agent ->> MCP: check-overdue
+    activate MCP
+    MCP -->> AI Agent: {"overdue": true, "command":"mplayer beep.mp3",...}
+    deactivate MCP
+    AI Agent ->> AI Agent: Run: mplayer beep.mp3
+    AI Agent ->> You: <<Beep!>>
+    activate You
+    You ->> You: It seems to be over. Let's go back.
+    deactivate You
+    deactivate AI Agent
+```
+
+The notify-completion-mcp-server addresses the issue of users needing to actively monitor their computer for AI task completion. By providing a notification mechanism triggered when tasks are finished, users can multitask more efficiently without repeatedly checking task status.
+
 ## Installation
 
-1. Add server config to Cline:
+1. Add server config to Cline (`cline_mcp_settings.json`):
 
 ```json
 {
@@ -13,7 +46,6 @@ The MCP server that provides notifications when AI agents complete long-running 
       "command": "npx",
       "args": ["-y", "@nakat-t/notify-completion-mcp-server@latest"],
       "env": {
-        "THRESHOLD": "<Threshold seconds>",
         "OVERDUE_COMMAND": "<Command to execute very flashy effects>",
       },
       "autoApprove": [ "start-timer", "check-overdue" ]
@@ -22,13 +54,12 @@ The MCP server that provides notifications when AI agents complete long-running 
 }
 ```
 
-2. Change the environment variables to your value.
-    * `THRESHOLD`: The threshold for task completion notifications. The unit is seconds. If the task execution time is less than this value, no completion notification will be sent. Default is 0 (notify always)
-    * `OVERDUE_COMMAND`: Command line for Cline to notify task completion.
+2. Change the config environment variables to your value.
+    * `OVERDUE_COMMAND`: Write a command to notify you when the task is complete.
 
-3. Copy the following custom instructions and paste to your Cline's settings.
+3. Check Cline's Auto-approve `Execute safe commands` and `Use MCP servers`. These must be auto-approve because Cline will execute the command and notify you when you are away.
 
-4. Check Cline's Auto-approve `Execute safe commands` and `Use MCP servers`. These must be auto-approve because Cline will execute the command and notify you when you are away.
+4. Copy the following custom instructions and paste to your Cline's settings.
 
 ## Custom Instructions for Cline
 
@@ -53,18 +84,6 @@ This guide provides **MANDATORY** instructions for explicitly notifying users wh
 Remember to monitor the task execution time. Be sure to use the 'notify-completion' MCP. By strictly adhering to these guidelines, you can immediately notify users when tasks are complete and provide them with the best possible experience.
 ```
 
-## MCP Tools
-
-1. `start-timer`: Start a timer to measure task execution time.
-    * Output: `{"startTime": "<Current time in ISO format>"}`
-    * Description: We instruct AI agents to call this tool first before executing tasks. Use custom instruction to do this.
-2. `check-overdue`: Check if the task is overdue based on the given threshold.
-    * Required inputs:
-        * `startTime`: Start time returned by start-timer
-    * Output:
-        * If the task execution time is not overdue: `{"elapsed": "<seconds>", "units": "seconds", "overdue": false}`
-        * If the task execution time is overdue: `{"elapsed": "<seconds>", "units": "seconds", "overdue": true, "command": "${OVERDUE_COMMAND}"}`
-
 ## For use it other than Cline
 
 This MCP server was created for use with Cline. However, if the AI agents you are using can execute shell commands, it should work as expected with just a few customizations.
@@ -83,6 +102,26 @@ Here are some tips for customization:
     2. **MUST** If the 'check-overdue' tool reports 'overdue': true, execute the contents of 'command' using execute_command.
     ```
     `execute_command` is terms specific to Cline. Please replace this text with an expression that means "execute command" for the AI agent you are using.
+
+## Confing Environment Variables
+
+- `THRESHOLD`: If the task execution time is less than the specified number of seconds, the overdue command is not executed. Default is 0. (always executed)
+
+- `OVERDUE_COMMAND`: Specify the command to execute when the task is completed.
+
+- `EXECUTE_IN_SERVER`: If this variable is defined, the overdue command is executed within the MCP server instead of being executed by the AI agent.
+
+## MCP Tools
+
+1. `start-timer`: Start a timer to measure task execution time.
+    * Output: `{"startTime": "<Current time in ISO format>"}`
+    * Description: We instruct AI agents to call this tool first before executing tasks. Use custom instruction to do this.
+2. `check-overdue`: Check if the task is overdue based on the given threshold.
+    * Required inputs:
+        * `startTime`: Start time returned by start-timer
+    * Output:
+        * If the task execution time is not overdue: `{"elapsed": "<seconds>", "units": "seconds", "overdue": false}`
+        * If the task execution time is overdue: `{"elapsed": "<seconds>", "units": "seconds", "overdue": true, "command": "${OVERDUE_COMMAND}"}`
 
 ## License
 
