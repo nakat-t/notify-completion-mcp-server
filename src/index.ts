@@ -7,7 +7,7 @@ import { appendFile } from "fs";
 import { execSync } from "child_process";
 
 const mcpName = "notify-completion";
-const mcpVersion = "1.0.4";
+const mcpVersion = "1.0.5";
 
 function debugLog(message?: any, ...optionalParams: any[]) {
   const timestamp = new Date().toISOString();
