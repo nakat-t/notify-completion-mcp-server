@@ -23,7 +23,7 @@
     "type": "git",
     "url": "git+https://github.com/nakat-t/notify-completion-mcp-server.git"
   },
-  "keywords": ["mcp", "cline", "notify"],
+  "keywords": ["mcp", "modelcontextprotocol", "server", "notify", "cline", "claude", "cursor"],
   "author": "nakat-t <armaiti.wizard@gmail.com>",
   "license": "MIT",
   "type": "module",
