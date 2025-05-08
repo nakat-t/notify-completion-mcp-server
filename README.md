@@ -4,6 +4,7 @@
 ![cline:worked badge](https://img.shields.io/badge/cline-worked-green)
 ![claude desktop:worked badge](https://img.shields.io/badge/claude_desktop-worked-green)
 ![cursor:worked badge](https://img.shields.io/badge/cursor-worked-green)
+![github copilot:worked badge](https://img.shields.io/badge/github_copilot-worked-green)
 
 The MCP server that provides notifications when AI agents complete long-running tasks. This allows you to leave your desktop without forgetting about tasks.
 
@@ -76,6 +77,7 @@ Remember to monitor the task execution time. Be sure to use the 'notify-completi
 | [Cline](https://marketplace.visualstudio.com/items?itemName=saoudrizwan.claude-dev) | worked | Primary development/testing platform |
 | [Claude Desktop](https://claude.ai/download) | worked | |
 | [Cursor](https://www.cursor.com/) | worked |  |
+| [GitHub Copilot](https://www.cursor.com/) | worked |  |
 
 MCP clients not listed here have not been tested, but should probably work if they have similar capabilities.
 
